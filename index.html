@@ -48,7 +48,6 @@
 
     <script type="text/babel">
         const { useState, useEffect } = React;
-        const { MessageSquare, Paperclip, Settings, Pin, Trash2, Plus, FileText, X, Briefcase, Layers, Gamepad2, Trophy, RotateCcw, Brain, Calculator, HelpCircle } = lucide;
 
         // --- PROMPTS ---
         const PROMPTS = {
@@ -95,7 +94,7 @@
                         {winner ? <span className="text-green-600">Winner: {winner}</span> : `Next Player: ${xIsNext ? 'X' : 'O'}`}
                     </div>
                     <button onClick={() => setBoard(Array(9).fill(null))} className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm flex items-center gap-2">
-                        <RotateCcw className="w-4 h-4"/> Reset
+                        <i data-lucide="rotate-ccw" className="w-4 h-4"></i> Reset
                     </button>
                 </div>
             );
@@ -153,7 +152,7 @@
                         ))}
                     </div>
                     <button onClick={resetGame} className="mt-6 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm flex items-center gap-2">
-                        <RotateCcw className="w-4 h-4"/> Reset
+                        <i data-lucide="rotate-ccw" className="w-4 h-4"></i> Reset
                     </button>
                 </div>
             );
@@ -266,17 +265,18 @@
             const [input, setInput] = useState('');
             const [isLoading, setIsLoading] = useState(false);
             const [attachedContext, setAttachedContext] = useState(null);
-            
-            // Game State
-            const [activeGame, setActiveGame] = useState(null); // 'tic', 'memory', 'decision', 'math'
+            const [activeGame, setActiveGame] = useState(null);
 
             useEffect(() => {
                 localStorage.setItem('cfo_threads_v3', JSON.stringify(threads));
             }, [threads]);
 
+            // IMPORTANT: Render Icons on every update
             useEffect(() => {
-                lucide.createIcons();
-            }, [threads, activeThreadId, showSettings, view, activeGame]);
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            });
 
             // Filter threads
             const visibleThreads = threads.filter(t => t.type === view || (!t.type && view === 'coach'));
@@ -415,22 +415,22 @@
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Game Cards */}
                                 <div onClick={() => setActiveGame('tic')} className="bg-white p-6 rounded-lg shadow border border-gray-200 hover:shadow-lg transition cursor-pointer flex flex-col items-center">
-                                    <div className="bg-blue-100 p-4 rounded-full mb-4"><Gamepad2 className="w-8 h-8 text-blue-600"/></div>
+                                    <div className="bg-blue-100 p-4 rounded-full mb-4"><i data-lucide="gamepad-2" className="w-8 h-8 text-blue-600"></i></div>
                                     <h3 className="font-bold text-lg mb-2">Tic-Tac-Toe</h3>
                                     <p className="text-center text-gray-500 text-sm">Classic strategy for a quick mental break.</p>
                                 </div>
                                 <div onClick={() => setActiveGame('memory')} className="bg-white p-6 rounded-lg shadow border border-gray-200 hover:shadow-lg transition cursor-pointer flex flex-col items-center">
-                                    <div className="bg-green-100 p-4 rounded-full mb-4"><Brain className="w-8 h-8 text-green-600"/></div>
+                                    <div className="bg-green-100 p-4 rounded-full mb-4"><i data-lucide="brain" className="w-8 h-8 text-green-600"></i></div>
                                     <h3 className="font-bold text-lg mb-2">Memory Match</h3>
                                     <p className="text-center text-gray-500 text-sm">Test your short-term recall.</p>
                                 </div>
                                 <div onClick={() => setActiveGame('decision')} className="bg-white p-6 rounded-lg shadow border border-gray-200 hover:shadow-lg transition cursor-pointer flex flex-col items-center">
-                                    <div className="bg-purple-100 p-4 rounded-full mb-4"><HelpCircle className="w-8 h-8 text-purple-600"/></div>
+                                    <div className="bg-purple-100 p-4 rounded-full mb-4"><i data-lucide="help-circle" className="w-8 h-8 text-purple-600"></i></div>
                                     <h3 className="font-bold text-lg mb-2">Decision Maker</h3>
                                     <p className="text-center text-gray-500 text-sm">Let fate decide your next budget move.</p>
                                 </div>
                                 <div onClick={() => setActiveGame('math')} className="bg-white p-6 rounded-lg shadow border border-gray-200 hover:shadow-lg transition cursor-pointer flex flex-col items-center">
-                                    <div className="bg-orange-100 p-4 rounded-full mb-4"><Calculator className="w-8 h-8 text-orange-600"/></div>
+                                    <div className="bg-orange-100 p-4 rounded-full mb-4"><i data-lucide="calculator" className="w-8 h-8 text-orange-600"></i></div>
                                     <h3 className="font-bold text-lg mb-2">Quick Math</h3>
                                     <p className="text-center text-gray-500 text-sm">Keep your multiplication skills sharp.</p>
                                 </div>
@@ -439,7 +439,7 @@
                     ) : (
                         <div className="h-full flex flex-col items-center justify-center">
                             <button onClick={() => setActiveGame(null)} className="mb-8 flex items-center gap-2 text-gray-500 hover:text-navy-900">
-                                <RotateCcw className="w-4 h-4"/> Back to Games
+                                <i data-lucide="rotate-ccw" className="w-4 h-4"></i> Back to Games
                             </button>
                             <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-200 w-full max-w-md">
                                 {activeGame === 'tic' && <TicTacToe />}
@@ -469,7 +469,7 @@
                         {!activeThread ? (
                             <div className="h-full flex flex-col items-center justify-center opacity-50">
                                 <div className="bg-white p-6 rounded-full shadow-sm mb-4">
-                                    {view === 'coach' ? <Briefcase className="w-10 h-10 text-navy-800"/> : <Layers className="w-10 h-10 text-gray-600"/>}
+                                    {view === 'coach' ? <i data-lucide="briefcase" className="w-10 h-10 text-navy-800"></i> : <i data-lucide="layers" className="w-10 h-10 text-gray-600"></i>}
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-700">Select or Start a Thread</h3>
                                 <p className="text-gray-500 mt-2">
@@ -486,7 +486,7 @@
                                     }`}>
                                         {msg.attachment && (
                                             <div className="flex items-center gap-2 mb-3 pb-3 border-b border-white/20">
-                                                <FileText className="w-4 h-4"/>
+                                                <i data-lucide="file-text" className="w-4 h-4"></i>
                                                 <span className="text-xs font-mono">{msg.attachment}</span>
                                             </div>
                                         )}
@@ -510,15 +510,15 @@
                             {attachedContext && (
                                 <div className="mb-2 bg-blue-50 border border-blue-200 rounded p-2 flex justify-between items-center">
                                     <span className="text-sm text-blue-800 flex items-center gap-2">
-                                        <FileText className="w-4 h-4"/> {attachedContext.name}
+                                        <i data-lucide="file-text" className="w-4 h-4"></i> {attachedContext.name}
                                     </span>
-                                    <button onClick={() => setAttachedContext(null)} className="text-blue-500 hover:text-blue-700"><X className="w-4 h-4"/></button>
+                                    <button onClick={() => setAttachedContext(null)} className="text-blue-500 hover:text-blue-700"><i data-lucide="x" className="w-4 h-4"></i></button>
                                 </div>
                             )}
                             <div className="flex gap-3">
                                 <label className="p-3 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded text-gray-600 cursor-pointer transition">
                                     <input type="file" onChange={handleFileUpload} className="hidden" />
-                                    <Paperclip className="w-5 h-5"/>
+                                    <i data-lucide="paperclip" className="w-5 h-5"></i>
                                 </label>
                                 <input 
                                     value={input}
@@ -558,20 +558,20 @@
                                     onClick={() => { setView('coach'); setActiveThreadId(null); setActiveGame(null); }}
                                     className={`flex-1 py-2 px-3 rounded text-sm font-semibold flex items-center justify-center gap-2 transition ${view === 'coach' ? 'bg-white text-navy-900 shadow border border-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    <Briefcase className="w-4 h-4"/> Coach
+                                    <i data-lucide="briefcase" className="w-4 h-4"></i> Coach
                                 </button>
                                 <button 
                                     onClick={() => { setView('other'); setActiveThreadId(null); setActiveGame(null); }}
                                     className={`flex-1 py-2 px-3 rounded text-sm font-semibold flex items-center justify-center gap-2 transition ${view === 'other' ? 'bg-white text-navy-900 shadow border border-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
                                 >
-                                    <Layers className="w-4 h-4"/> Other
+                                    <i data-lucide="layers" className="w-4 h-4"></i> Other
                                 </button>
                             </div>
                             <button 
                                 onClick={() => { setView('games'); setActiveThreadId(null); setActiveGame(null); }}
                                 className={`w-full py-2 px-3 rounded text-sm font-semibold flex items-center justify-center gap-2 transition ${view === 'games' ? 'bg-white text-gold-600 shadow border border-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
                             >
-                                <Gamepad2 className="w-4 h-4"/> Break Room
+                                <i data-lucide="gamepad-2" className="w-4 h-4"></i> Break Room
                             </button>
                         </div>
 
@@ -580,7 +580,7 @@
                             <div className="flex-1 overflow-y-auto">
                                 <div className="p-3">
                                     <button onClick={createNewThread} className="w-full bg-navy-800 hover:bg-navy-900 text-white py-2 px-4 rounded shadow-sm text-sm font-semibold flex items-center justify-center gap-2 transition">
-                                        <Plus className="w-4 h-4"/> New {view === 'coach' ? 'Question' : 'Task'}
+                                        <i data-lucide="plus" className="w-4 h-4"></i> New {view === 'coach' ? 'Question' : 'Task'}
                                     </button>
                                 </div>
                                 
@@ -601,7 +601,7 @@
                             </div>
                         ) : (
                             <div className="flex-1 p-6 text-center text-gray-400 text-sm flex flex-col items-center justify-center">
-                                <Trophy className="w-12 h-12 mb-2 text-gray-300"/>
+                                <i data-lucide="trophy" className="w-12 h-12 mb-2 text-gray-300"></i>
                                 <p>Take a break, Edgar.</p>
                             </div>
                         )}
@@ -609,7 +609,7 @@
                         {/* Settings Footer */}
                         <div className="p-3 border-t border-gray-200 bg-gray-50">
                             <button onClick={() => setShowSettings(true)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-navy-900">
-                                <Settings className="w-4 h-4"/> System Settings
+                                <i data-lucide="settings" className="w-4 h-4"></i> System Settings
                             </button>
                         </div>
                     </div>
@@ -659,10 +659,10 @@
                 <div className="truncate text-sm pr-2 flex-1 font-medium">{t.title}</div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button onClick={(e) => onPin(e, t.id)} className={`p-1 hover:text-navy-800 ${t.pinned ? 'text-navy-800 opacity-100' : ''}`}>
-                        <Pin className="w-3 h-3"/>
+                        <i data-lucide="pin" className="w-3 h-3"></i>
                     </button>
                     <button onClick={(e) => onDelete(e, t.id)} className="p-1 hover:text-red-600">
-                        <Trash2 className="w-3 h-3"/>
+                        <i data-lucide="trash-2" className="w-3 h-3"></i>
                     </button>
                 </div>
             </div>
